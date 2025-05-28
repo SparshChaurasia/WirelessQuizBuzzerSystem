@@ -4,7 +4,7 @@ MQTT_HOST = "192.168.1.25"
 MQTT_PORT = 1883
 MQTT_KEEPALIVE_INTERVAL = 5
 MQTT_TOPIC = "device/reset"
-MQTT_MSG = "Hello MQTT"
+MQTT_MSG = "1"
 
 # Define on_connect event Handler
 def on_connect(mosq, obj, rc):
