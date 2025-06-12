@@ -5,12 +5,12 @@
 ![Pub Sub Client Model](./assets/system_architecture.png)
 
 ## Components
-1. ***Raspberry Pi 3B+*** — as MQTT broker
-1. ***Wemos D1 Mini ESP8266MOD*** — used in buzzer module
-1. ***Button Module***
-1. ***Buzzer***
-1. ***LEDs***
-1. ***Jumper Wire***
+1. **Raspberry Pi 3B+** — as MQTT broker
+1. **Wemos D1 Mini ESP8266MOD** — used in buzzer module
+1. **Button Module**
+1. **Buzzer**
+1. **LEDs**
+1. **Jumper Wire**
 
 ## Server Setup (Raspberry Pi Setup)
 ### 1. Make Connections to the Raspberry Board in the Following Manner
@@ -71,8 +71,9 @@ mosquitto_pub -d -t "MyTopic" -m "Hello"
 <hr>
 
 ### 5. Download Server Side Scripts
-1. Download the scripts in the /RaspberryPi folder from this repository
+1. Download the scripts in the *RaspberryPi* folder from this repository
 2. Paste the scripts in the *Desktop* (without parent folder) ****required otherwire all paths in the scripts and commands need to be updated*** 
+<hr>
 
 ### 6. Setup Scripts to Run on Startup
 Simple setup using crontab to run scripts on startup.
