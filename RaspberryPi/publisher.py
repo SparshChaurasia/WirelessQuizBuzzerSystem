@@ -1,5 +1,12 @@
-print("Publisher is running...")
-input()
+#!/usr/bin/python3.11
+
+import time
+from datetime import datetime
+
+with open("/home/admin/Desktop/timelog.txt", "a") as f:
+    _datetime = str(datetime.now())
+    f.write(f"Publisher process started at {_datetime}\n")
+
 """
 import paho.mqtt.client as mqtt
 
@@ -29,11 +36,13 @@ mqttc.on_connect = on_connect
 # Connect with MQTT Broker
 mqttc.connect(MQTT_HOST, MQTT_PORT, MQTT_KEEPALIVE_INTERVAL)
 
+
 while True:
     # Check if button is pressed on the board
 
-    # If pressed, publish message to MQTT Topic
-    # mqttc.publish(MQTT_TOPIC, MQTT_MSG)
+    # If pressed, publish reset message to MQTT Topic
+    mqttc.publish(MQTT_TOPIC, MQTT_MSG)
+    time.sleep(2)
 
 # Disconnect from MQTT_Broker
 mqttc.disconnect()

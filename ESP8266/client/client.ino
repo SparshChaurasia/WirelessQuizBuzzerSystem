@@ -3,9 +3,11 @@
 
 // Update these with values suitable for your network.
 
-const char* ssid = "QVpVMBCE1UiMAsKJV7mR";
-const char* password = "Dn739Irws32eq2I72QxA";
-const char* mqtt_server = "broker.mqtt-dashboard.com";
+// const char* ssid = "QVpVMBCE1UiMAsKJV7mR";
+// const char* password = "Dn739Irws32eq2I72QxA";
+const char* ssid = "raspberry";
+const char* password = "raspberry";
+const char* mqtt_server = "10.42.0.1";
 const char device_id = '1';
 
 bool is_listening = true;

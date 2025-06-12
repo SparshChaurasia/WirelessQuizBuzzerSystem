@@ -1,2 +1,0 @@
-sudo crontab -e
-@reboot python3 <path/to/file> &
