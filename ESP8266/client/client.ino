@@ -1,14 +1,17 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
-// Update these with values suitable for your network.
+
+const int LED_PIN = D5;
+const int BUZZER_PIN = D6;
+const int DELAY_TIME = 500;
 
 // const char* ssid = "QVpVMBCE1UiMAsKJV7mR";
 // const char* password = "Dn739Irws32eq2I72QxA";
-const char* ssid = "raspberry";
-const char* password = "raspberry";
-const char* mqtt_server = "10.42.0.1";
-const char device_id = '1';
+const char ssid[] = "raspberry";  // For Debugging purposes
+const char password[] = "raspberry";  // For Debugging purposes
+const char mqtt_server[] = "10.42.0.1";
+const char device_id[] = "1";
 
 bool is_listening = true;
 
@@ -52,33 +55,65 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println();
 
   if ((String)topic == "device/main" && is_listening == true) {
-    if ((char)payload[0] == device_id) {
+    if ((char)payload[0] == device_id[0]) {
       // Button was pressed by this device
+
+      // Logs for debug
       Serial.print("Button press from device id ");
       Serial.print((char)payload[0]);
       Serial.println(" was registered");
       Serial.println("(LED lights up and buzzer is Sounded)");
 
-      // TODO: Set LED pin high
-      // TODO: Set buzzer pin high for a moment 
-
+      // Update listening state
       is_listening = false;
+
+      // Set LED and buzzer pin high for a moment 
+      digitalWrite(LED_PIN, HIGH);
+      tone(BUZZER_PIN, 400); // A4
+      delay(DELAY_TIME);
+      tone(BUZZER_PIN, 500); // B4
+      delay(DELAY_TIME);
+      tone(BUZZER_PIN, 550); // C4
+      delay(DELAY_TIME);
+      tone(BUZZER_PIN, 600); // D4
+      delay(DELAY_TIME);
+      tone(BUZZER_PIN, 650); // E4
+      delay(DELAY_TIME);
+      digitalWrite(LED_PIN, LOW);
+      digitalWrite(BUZZER_PIN, LOW);
 
     } else {
       // Button was pressed by some other device
+
+      // Logs for debug
       Serial.print("Button press from device id ");
       Serial.print((char)payload[0]);
       Serial.println(" was registered");
       Serial.println("Stopped listening to updates on the device/main channel");
 
+      // Update listening state
       is_listening = false;
+
+      digitalWrite(LED_PIN, LOW);
+      digitalWrite(BUZZER_PIN, LOW);
+
     }
   } else if ((String)topic == "device/reset") {
     if ((char)payload[0] == '1') {
-      // If reset message is recieved on the device/reset topic to start listening      
+      // If reset message is recieved on the device/reset topic to start listening
+
+      // Log for debug  
       Serial.println("Started listening to updates on the device/main channel");
 
+      // Update listening state
       is_listening = true;
+
+      // Turn on led and buzzer for a brief moment to show that the device is reset
+      digitalWrite(LED_PIN, HIGH);
+      tone(BUZZER_PIN, 650); // A4
+      delay(DELAY_TIME);      
+      digitalWrite(LED_PIN, LOW);
+      digitalWrite(BUZZER_PIN, LOW);
     }
   }
 
@@ -108,6 +143,12 @@ void reconnect() {
 }
 
 void setup() {
+  // Setup pins according to the circuit
+  pinMode(D1, INPUT);
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+
+  // MQTT client and WiFi setup
   Serial.begin(9600);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
@@ -122,9 +163,13 @@ void loop() {
   client.loop();
   
   // Check if button is pressed
-  /*
-  Serial.println("Published device id to device/main");
-  client.publish("device/main", deivce_id);
-  */
+  if (digitalRead(D1) == HIGH) {
+    // Log for debug
+    Serial.println("Published device id to device/main");
+
+    // Publish message to MQTT broker
+    client.publish("device/main", device_id);
+    delay(1000);
+  }
 }
 
