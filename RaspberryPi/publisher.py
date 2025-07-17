@@ -16,6 +16,17 @@ GPIO.setmode(GPIO.BOARD)  # Set's GPIO pins to BCM GPIO numbering
 INPUT_PIN = 7  # Sets our input pin
 GPIO.setup(INPUT_PIN, GPIO.IN)  # Set our input_pin to be an input
 
+
+# Define on_connect event Handler
+def on_connect(mosq, obj, rc):
+    print("Connected to MQTT Broker!")
+
+
+# Define on_publish event Handler
+def on_publish(client, userdata, mid):
+    print("Reset message published on device/reset")
+
+
 # Setup MQTT client
 MQTT_HOST = "10.42.0.1"
 MQTT_PORT = 1883
@@ -32,16 +43,6 @@ mqttc.on_connect = on_connect
 
 # Connect with MQTT Broker
 mqttc.connect(MQTT_HOST, MQTT_PORT, MQTT_KEEPALIVE_INTERVAL)
-
-
-# Define on_connect event Handler
-def on_connect(mosq, obj, rc):
-    print("Connected to MQTT Broker!")
-
-
-# Define on_publish event Handler
-def on_publish(client, userdata, mid):
-    print("Reset message published on device/reset")
 
 
 while True:
