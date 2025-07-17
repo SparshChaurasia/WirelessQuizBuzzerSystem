@@ -3,28 +3,25 @@
 import time
 from datetime import datetime
 
+import paho.mqtt.client as mqtt
+import RPi.GPIO as GPIO
+
+# Log process startup
 with open("/home/admin/Desktop/timelog.txt", "a") as f:
     _datetime = str(datetime.now())
     f.write(f"Publisher process started at {_datetime}\n")
 
-"""
-import paho.mqtt.client as mqtt
+# Setup GPIO pins
+GPIO.setmode(GPIO.BCM)  # Set's GPIO pins to BCM GPIO numbering
+INPUT_PIN = 2  # Sets our input pin, in this example I'm connecting our button to pin 4. Pin 0 is the SDA pin so I avoid using it for sensors/buttons
+GPIO.setup(INPUT_PIN, GPIO.IN)  # Set our input_pin to be an input
 
+# Setup MQTT client
 MQTT_HOST = "10.42.0.1"
 MQTT_PORT = 1883
 MQTT_KEEPALIVE_INTERVAL = 5
 MQTT_TOPIC = "device/reset"
 MQTT_MSG = "1"
-
-# Define on_connect event Handler
-def on_connect(mosq, obj, rc):
-    print("Connected to MQTT Broker!")
-
-
-# Define on_publish event Handler
-def on_publish(client, userdata, mid):
-    print("Reset message published on device/reset")
-
 
 # Initiate MQTT Client
 mqttc = mqtt.Client()
@@ -37,13 +34,24 @@ mqttc.on_connect = on_connect
 mqttc.connect(MQTT_HOST, MQTT_PORT, MQTT_KEEPALIVE_INTERVAL)
 
 
+# Define on_connect event Handler
+def on_connect(mosq, obj, rc):
+    print("Connected to MQTT Broker!")
+
+
+# Define on_publish event Handler
+def on_publish(client, userdata, mid):
+    print("Reset message published on device/reset")
+
+
 while True:
     # Check if button is pressed on the board
+    if GPIO.input(INPUT_PIN) == True:
+        # If pressed, publish reset message to MQTT Topic
+        mqttc.publish(MQTT_TOPIC, MQTT_MSG)
+        time.sleep(2)
 
-    # If pressed, publish reset message to MQTT Topic
-    mqttc.publish(MQTT_TOPIC, MQTT_MSG)
-    time.sleep(2)
+    time.sleep(0.1)
 
 # Disconnect from MQTT_Broker
 mqttc.disconnect()
-"""

@@ -3,7 +3,7 @@
 
 
 const int LED_PIN = D5;
-const int BUZZER_PIN = D6;
+const int BUZZER_PIN = D2;
 const int DELAY_TIME = 500;
 
 // const char* ssid = "QVpVMBCE1UiMAsKJV7mR";
