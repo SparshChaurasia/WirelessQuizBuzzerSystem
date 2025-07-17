@@ -12,8 +12,8 @@ with open("/home/admin/Desktop/timelog.txt", "a") as f:
     f.write(f"Publisher process started at {_datetime}\n")
 
 # Setup GPIO pins
-GPIO.setmode(GPIO.BCM)  # Set's GPIO pins to BCM GPIO numbering
-INPUT_PIN = 2  # Sets our input pin, in this example I'm connecting our button to pin 4. Pin 0 is the SDA pin so I avoid using it for sensors/buttons
+GPIO.setmode(GPIO.BOARD)  # Set's GPIO pins to BCM GPIO numbering
+INPUT_PIN = 7  # Sets our input pin
 GPIO.setup(INPUT_PIN, GPIO.IN)  # Set our input_pin to be an input
 
 # Setup MQTT client
