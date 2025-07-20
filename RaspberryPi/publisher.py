@@ -33,6 +33,7 @@ def on_publish(client, userdata, mid):
 
 def on_message(client, userdata, msg):
     if msg.topic == "device/main":
+        global SERVER_STATE
         SERVER_STATE = False
         print("Ready LED off")
     payload = msg.payload.decode()
