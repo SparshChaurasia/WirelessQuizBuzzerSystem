@@ -22,13 +22,21 @@ GPIO.setup(READY_LED_PIN, GPIO.OUT)  # Set our READY_LED_PIN as an output pin
 
 
 # Define on_connect event Handler
-def on_connect(mosq, obj, rc):
+def on_connect(mosq, obj, rc, d):
     print("Connected to MQTT Broker!")
 
 
 # Define on_publish event Handler
 def on_publish(client, userdata, mid):
     print("Reset message published on device/reset")
+
+
+def on_message(client, userdata, msg):
+    if msg.topic == "device/main":
+        SERVER_STATE = False
+        print("Ready LED off")
+    payload = msg.payload.decode()
+    print(f"{msg.topic}: {payload}")
 
 
 # Setup MQTT client
@@ -44,10 +52,14 @@ mqttc = mqtt.Client()
 # Register Event Handlers
 mqttc.on_publish = on_publish
 mqttc.on_connect = on_connect
+mqttc.on_message = on_message
 
 # Connect with MQTT Broker
 mqttc.connect(MQTT_HOST, MQTT_PORT, MQTT_KEEPALIVE_INTERVAL)
 
+mqttc.subscribe("device/main")
+
+mqttc.loop_start()
 
 while True:
     # Check the server state and toggle the ready led accordingly
@@ -62,11 +74,11 @@ while True:
         mqttc.publish(MQTT_TOPIC, MQTT_MSG)
 
         # Toggle server state variable
-        SERVER_STATE = not SERVER_STATE
+        SERVER_STATE = True
 
-        time.sleep(1)
+        time.sleep(2)
 
     time.sleep(0.1)
 
 # Disconnect from MQTT_Broker
-mqttc.disconnect()
+mqttc.loop_stop()
