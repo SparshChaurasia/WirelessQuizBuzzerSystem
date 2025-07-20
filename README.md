@@ -70,12 +70,18 @@ mosquitto_pub -d -t "MyTopic" -m "Hello"
 ```
 <hr>
 
-### 5. Download Server Side Scripts
+### 6. Download Server Side Scripts
 1. Download the scripts in the *RaspberryPi* folder from this repository
 2. Paste the scripts in the *Desktop* (without parent folder) ****required otherwire all paths in the scripts and commands need to be updated*** 
 <hr>
 
-### 6. Setup Scripts to Run on Startup
+### 7. Make the publisher script executable
+```
+chmod -x /home/admin/Desktop/publisher.py
+```
+<hr>
+
+### 8. Setup Scripts to Run on Startup
 Simple setup using crontab to run scripts on startup.
 1. Get python interpreter path
 ```
@@ -88,8 +94,7 @@ sudo crontab -e
 3. Choose Nano as editor (easiest)
 4. Paste the following snippet at the end of the file
 ```
-@reboot <path/to/python-interpreter> /home/admin/Desktop/startup.py
-
+@reboot <path/to/python-interpreter> /home/admin/Desktop/startup.py&
 ```
 5. Make sure to leave an blank line at the end of the file
 
@@ -99,3 +104,4 @@ sudo crontab -e
 ### 2. Upload Code
 1. Download the Arduino IDE and install the ESP8266 board manager on it
 2. Upload the *client.ino* file in the ESP8266/client folder
+3. Change device id for each buzzer module

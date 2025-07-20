@@ -6,15 +6,19 @@ from datetime import datetime
 import paho.mqtt.client as mqtt
 import RPi.GPIO as GPIO
 
-# Log process startup
-with open("/home/admin/Desktop/timelog.txt", "a") as f:
-    _datetime = str(datetime.now())
-    f.write(f"Publisher process started at {_datetime}\n")
+# Log process startup (for debugging)
+# with open("/home/admin/Desktop/timelog.txt", "a") as f:
+#   _datetime = str(datetime.now())
+#   f.write(f"Publisher process started at {_datetime}\n")
+
+SERVER_STATE = True
 
 # Setup GPIO pins
-GPIO.setmode(GPIO.BOARD)  # Set's GPIO pins to BCM GPIO numbering
-INPUT_PIN = 7  # Sets our input pin
-GPIO.setup(INPUT_PIN, GPIO.IN)  # Set our input_pin to be an input
+GPIO.setmode(GPIO.BOARD)  # Using Board GPIO numbering
+INPUT_PIN = 7
+READY_LED_PIN = 11
+GPIO.setup(INPUT_PIN, GPIO.IN)  # Set our INPUT_PIN as an input pin
+GPIO.setup(READY_LED_PIN, GPIO.OUT)  # Set our READY_LED_PIN as an output pin
 
 
 # Define on_connect event Handler
@@ -46,11 +50,21 @@ mqttc.connect(MQTT_HOST, MQTT_PORT, MQTT_KEEPALIVE_INTERVAL)
 
 
 while True:
+    # Check the server state and toggle the ready led accordingly
+    if SERVER_STATE == True:
+        GPIO.output(READY_LED_PIN, True)
+    else:
+        GPIO.output(READY_LED_PIN, False)
+
     # Check if button is pressed on the board
     if GPIO.input(INPUT_PIN) == True:
         # If pressed, publish reset message to MQTT Topic
         mqttc.publish(MQTT_TOPIC, MQTT_MSG)
-        time.sleep(2)
+
+        # Toggle server state variable
+        SERVER_STATE = not SERVER_STATE
+
+        time.sleep(1)
 
     time.sleep(0.1)
 

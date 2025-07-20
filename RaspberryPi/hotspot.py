@@ -3,9 +3,10 @@
 import os
 from datetime import datetime
 
-with open("/home/admin/Desktop/timelog.txt", "a") as f:
-    _datetime = str(datetime.now())
-    f.write(f"Hotspot process started at {_datetime}\n")
+# Log process startup (for debugging)
+# with open("/home/admin/Desktop/timelog.txt", "a") as f:
+#    _datetime = str(datetime.now())
+#    f.write(f"Hotspot process started at {_datetime}\n")
 
 # hotspot_name = "QVpVMBCE1UiMAsKJV7mR"
 # password = "Dn739Irws32eq2I72QxA"

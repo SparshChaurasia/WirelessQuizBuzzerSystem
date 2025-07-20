@@ -2,6 +2,7 @@
 #include <PubSubClient.h>
 
 
+const int INPUT_PIN = D1;
 const int LED_PIN = D5;
 const int BUZZER_PIN = D2;
 const int DELAY_TIME = 500;
@@ -11,7 +12,7 @@ const int DELAY_TIME = 500;
 const char ssid[] = "raspberry";  // For Debugging purposes
 const char password[] = "raspberry";  // For Debugging purposes
 const char mqtt_server[] = "10.42.0.1";
-const char device_id[] = "1";
+const char device_id[] = "4";
 
 bool is_listening = true;
 
@@ -144,7 +145,7 @@ void reconnect() {
 
 void setup() {
   // Setup pins according to the circuit
-  pinMode(D1, INPUT);
+  pinMode(INPUT_PIN, INPUT);
   pinMode(LED_PIN, OUTPUT);
   pinMode(BUZZER_PIN, OUTPUT);
 
@@ -163,7 +164,7 @@ void loop() {
   client.loop();
   
   // Check if button is pressed
-  if (digitalRead(D1) == HIGH) {
+  if (digitalRead(INPUT_PIN) == HIGH) {
     // Log for debug
     Serial.println("Published device id to device/main");
 
